@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CleanCode</string>
+    <string name="title_users">Users</string>
+    <string name="title_posts">Posts</string>
+    <string name="title_albums">Albums</string>
+    <string name="title_todos">ToDos</string>
+
+    <!-- error strings -->
+    <string name="need_user_model">Need a user to fetch all the posts, albums etc.</string>
+</resources>
