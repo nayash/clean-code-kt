@@ -9,9 +9,6 @@ class UsersViewModel: ViewModel() {
     val usersLiveData: MutableLiveData<ArrayList<UserModel>> = MutableLiveData()
     val listUsers: ArrayList<UserModel> = ArrayList()
 
-    init {
-
-    }
 
     fun fetchUsers(pageNum:Int = Const.INIT_PAGE_NUM, pageSize:Int = Const.PAGE_SIZE){
 

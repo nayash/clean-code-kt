@@ -1,8 +1,10 @@
 package com.outliers.cleancodekt.users.dagger
 
+import com.outliers.cleancodekt.framework.dagger.ActivityScope
 import com.outliers.cleancodekt.users.ui.UsersActivity
 import dagger.Subcomponent
 
+@ActivityScope
 @Subcomponent // tells Dagger that it is a subcomponent. But to tell that it depends on CCAppComponent a new Module (SubComponentsModule) has to be created
 // that module is then passed to CCAppComp's modules list
 interface UsersComponent {
