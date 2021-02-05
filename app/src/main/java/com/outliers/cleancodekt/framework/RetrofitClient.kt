@@ -10,9 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private lateinit var retrofit: Retrofit
-    init {
-       retrofit = getClient()
-    }
 
     fun getClient(): Retrofit{
         val httpLoginInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()

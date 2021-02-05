@@ -1,7 +1,17 @@
 package com.outliers.cleancodekt.users.repos
 
-import retrofit2.Retrofit
+import com.outliers.cleancodekt.users.models.UserModel
+import com.outliers.cleancodekt.users.network.UsersClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.Response
+import javax.inject.Inject
 
-class UsersRepo(retrofit: Retrofit) {
-    //fun fetchUsers()
+class UsersRepo @Inject constructor(@Inject var usersClient: UsersClient) {
+
+    suspend fun fetchUsers(page: Int, limit: Int): Response<List<UserModel>> {
+        return withContext(Dispatchers.IO) {
+            usersClient.getUsers(page, limit)
+        }
+    }
 }
