@@ -1,13 +1,13 @@
 package com.outliers.cleancodekt.users.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.outliers.cleancodekt.constants.Const
 import com.outliers.cleancodekt.databinding.ActivityUsersBinding
 import com.outliers.cleancodekt.framework.CCApplication
+import com.outliers.cleancodekt.users.adapters.UsersRVAdapter
 import com.outliers.cleancodekt.users.dagger.UsersComponent
 import com.outliers.cleancodekt.users.repos.UsersRepo
 import com.outliers.cleancodekt.users.viewmodels.UsersViewModel
@@ -22,7 +22,7 @@ class UsersActivity : AppCompatActivity() {
     lateinit var usersViewModelFactory: UsersViewModelFactory
     @Inject
     lateinit var usersRepo: UsersRepo
-
+    lateinit var adapter: UsersRVAdapter
 
     //@Inject lateinit var
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +38,9 @@ class UsersActivity : AppCompatActivity() {
 
     fun observeVM() {
         usersViewModel.usersLiveData.observe(this, Observer {
-            println(it)
-            Log.e("observe", it.toString())
+            if(adapter == null) // accessing lateinit var here causes UninitPropAccessException
+                adapter = UsersRVAdapter(usersViewModel.listUsers)
+            adapter.notifyDataSetChanged()
         })
     }
 }
