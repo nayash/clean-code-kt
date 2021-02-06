@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
-class UsersRepo @Inject constructor(@Inject var usersClient: UsersClient) {
+class UsersRepo @Inject constructor(var usersClient: UsersClient) {
 
     suspend fun fetchUsers(page: Int, limit: Int): Response<List<UserModel>> {
         return withContext(Dispatchers.IO) {

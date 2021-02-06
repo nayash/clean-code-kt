@@ -8,9 +8,8 @@ import com.outliers.cleancodekt.users.models.UserModel
 import com.outliers.cleancodekt.users.repos.UsersRepo
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import javax.inject.Inject
 
-class UsersViewModel @Inject constructor(val usersRepo: UsersRepo):ViewModel() {
+class UsersViewModel(val usersRepo: UsersRepo):ViewModel() {
 
     val usersLiveData: MutableLiveData<List<UserModel>> = MutableLiveData()
     val listUsers: MutableList<UserModel> = ArrayList()

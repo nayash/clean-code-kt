@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface UsersClient {
 
     @GET("/users")
-    fun getUsers(@Query("_page") page: Int, @Query("_limit") limit: Int): Response<List<UserModel>>
+    suspend fun getUsers(@Query("_page") page: Int, @Query("_limit") limit: Int): Response<List<UserModel>>
 }
