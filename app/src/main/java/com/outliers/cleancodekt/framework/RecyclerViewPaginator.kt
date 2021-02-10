@@ -15,6 +15,8 @@ class RecyclerViewPaginator(val recyclerView: RecyclerView, val parent: Recycler
 
     var layoutManager: RecyclerView.LayoutManager? = recyclerView.layoutManager
     val threshold: Int = 3
+    var pageNum: Int = startPage
+    var isRequestSent = false
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -35,8 +37,16 @@ class RecyclerViewPaginator(val recyclerView: RecyclerView, val parent: Recycler
                 lastItemPos = gridLayoutManager.findLastVisibleItemPosition()
             }
 
+            if(parent.isLoading or parent.isLastPage)
+                return
+
             if(visibleItems+lastItemPos+threshold > totalItems){
-                if(parent.loadMore())
+                if(!parent.isLastPage and !isRequestSent){
+                    parent.loadMore(++pageNum, batchSize)
+                    isRequestSent = true
+                }else{
+                    isRequestSent = false
+                }
             }
         }
     }

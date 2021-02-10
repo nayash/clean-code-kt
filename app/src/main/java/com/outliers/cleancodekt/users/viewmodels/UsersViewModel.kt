@@ -13,14 +13,30 @@ class UsersViewModel(val usersRepo: UsersRepo):ViewModel() {
 
     val usersLiveData: MutableLiveData<List<UserModel>> = MutableLiveData()
     val listUsers: MutableList<UserModel> = ArrayList()
+    val isLastPage: MutableLiveData<Boolean> = MutableLiveData()
+
+    init{
+        isLastPage.value = false
+    }
 
     fun fetchUsers(pageNum:Int = Const.INIT_PAGE_NUM, pageSize:Int = Const.PAGE_SIZE){
         viewModelScope.launch {
             val resp: Response<List<UserModel>> = usersRepo.fetchUsers(pageNum, pageSize)
             if(resp.isSuccessful) {
-                resp.body()?.let { listUsers.addAll(it) }
+                resp.body()?.let { listUsers.addAll(it)
+                    if(it.size == 0){
+                        isLastPage.value = true
+                    }
+                }
                 usersLiveData.value = listUsers
             }
         }
+    }
+
+    fun refresh(){
+        listUsers.clear()
+        usersLiveData.value = listUsers
+        isLastPage.value = false
+        fetchUsers()
     }
 }
