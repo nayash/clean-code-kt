@@ -1,13 +1,13 @@
 package com.outliers.cleancodekt.users.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.outliers.cleancodekt.constants.Const
 import com.outliers.cleancodekt.databinding.ActivityUsersBinding
 import com.outliers.cleancodekt.framework.CCApplication
+import com.outliers.cleancodekt.framework.CCKtParentActivity
 import com.outliers.cleancodekt.framework.RecyclerViewPaginator
 import com.outliers.cleancodekt.users.adapters.UsersRVAdapter
 import com.outliers.cleancodekt.users.dagger.UsersComponent
@@ -16,7 +16,7 @@ import com.outliers.cleancodekt.users.viewmodels.UsersViewModel
 import com.outliers.cleancodekt.users.viewmodels.UsersViewModelFactory
 import javax.inject.Inject
 
-class UsersActivity : AppCompatActivity(), RecyclerViewPaginator.RecyclerPaginatorParent {
+class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPaginatorParent {
     val binder: ActivityUsersBinding by lazy { ActivityUsersBinding.inflate(layoutInflater) }
     lateinit var usersComponent: UsersComponent
     lateinit var usersViewModel: UsersViewModel

@@ -1,12 +1,12 @@
 package com.outliers.cleancodekt.framework
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.outliers.cleancodekt.constants.Const
 
-class CCKtParentActivity: Activity() {
+open class CCKtParentActivity: AppCompatActivity() {
 
     lateinit var appPref: SharedPreferences
 
