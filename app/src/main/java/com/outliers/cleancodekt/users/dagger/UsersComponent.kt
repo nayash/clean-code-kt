@@ -10,7 +10,7 @@ import dagger.Subcomponent
 // CCAppComp's modules list
 interface UsersComponent {
 
-    @Subcomponent.Factory // tells Dagger Component how to create this subcomponent
+    @Subcomponent.Factory // tells App Component how to create this subcomponent
     interface Factory{
         fun create(): UsersComponent
     }

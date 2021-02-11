@@ -24,6 +24,8 @@ class UsersActivity : AppCompatActivity(), RecyclerViewPaginator.RecyclerPaginat
     lateinit var usersViewModelFactory: UsersViewModelFactory
     @Inject
     lateinit var usersRepo: UsersRepo
+    @Inject
+    lateinit var usersRepo1: UsersRepo
     var adapter: UsersRVAdapter? = null
 
     //@Inject lateinit var
@@ -40,6 +42,7 @@ class UsersActivity : AppCompatActivity(), RecyclerViewPaginator.RecyclerPaginat
         observeVM()
         binder.srlUsers.setOnRefreshListener {  onRefresh() }
         onRefresh()
+        println("test--"+ (usersRepo===usersRepo1).toString())
     }
 
     fun onRefresh(){
