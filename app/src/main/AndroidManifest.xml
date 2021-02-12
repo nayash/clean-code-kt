@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".userprofile.ui.UserProfileActivity"/>
+        <activity android:name=".userprofile.ui.UserProfileActivity"
+            android:theme="@style/Theme.CleanCodeKt.NoActionBar"/>
     </application>
 
 </manifest>

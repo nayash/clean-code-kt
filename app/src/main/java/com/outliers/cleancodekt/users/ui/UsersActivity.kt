@@ -1,5 +1,6 @@
 package com.outliers.cleancodekt.users.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -9,14 +10,17 @@ import com.outliers.cleancodekt.databinding.ActivityUsersBinding
 import com.outliers.cleancodekt.framework.CCApplication
 import com.outliers.cleancodekt.framework.CCKtParentActivity
 import com.outliers.cleancodekt.framework.RecyclerViewPaginator
+import com.outliers.cleancodekt.userprofile.ui.UserProfileActivity
 import com.outliers.cleancodekt.users.adapters.UsersRVAdapter
 import com.outliers.cleancodekt.users.dagger.UsersComponent
+import com.outliers.cleancodekt.users.models.UserModel
 import com.outliers.cleancodekt.users.repos.UsersRepo
 import com.outliers.cleancodekt.users.viewmodels.UsersViewModel
 import com.outliers.cleancodekt.users.viewmodels.UsersViewModelFactory
 import javax.inject.Inject
 
-class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPaginatorParent {
+class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPaginatorParent,
+UsersRVAdapter.UsersAdapterInterface{
     val binder: ActivityUsersBinding by lazy { ActivityUsersBinding.inflate(layoutInflater) }
     lateinit var usersComponent: UsersComponent
     lateinit var usersViewModel: UsersViewModel
@@ -53,7 +57,7 @@ class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPagina
     fun observeVM() {
         usersViewModel.usersLiveData.observe(this, Observer {
             if(adapter == null) {
-                adapter = UsersRVAdapter(usersViewModel.listUsers)
+                adapter = UsersRVAdapter(usersViewModel.listUsers, this)
                 binder.rvUsers.adapter = adapter
             }
             adapter?.notifyDataSetChanged()
@@ -69,5 +73,11 @@ class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPagina
     override fun loadMore(page: Int, batchSize: Int) {
         binder.srlUsers.isRefreshing = true
         usersViewModel.fetchUsers(page, batchSize)
+    }
+
+    override fun itemClicked(position: Int, model: UserModel) {
+        val userActivityIntent = Intent(this, UserProfileActivity::class.java)
+        userActivityIntent.putExtra("user_model", model)
+        startActivity(userActivityIntent)
     }
 }

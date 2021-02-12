@@ -9,13 +9,21 @@ import com.outliers.cleancodekt.R
 import com.outliers.cleancodekt.databinding.ItemUserBinding
 import com.outliers.cleancodekt.users.models.UserModel
 
-class UsersRVAdapter constructor(val models: List<UserModel>):RecyclerView.Adapter<UsersRVAdapter.UserViewHolder>() {
-    // var models: List<UserModel> = viewModel.listUsers
+class UsersRVAdapter constructor(val models: List<UserModel>, val parent: UsersAdapterInterface): RecyclerView.Adapter<UsersRVAdapter.UserViewHolder>() {
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    interface UsersAdapterInterface {
+        fun itemClicked(position: Int, model: UserModel)
+    }
+
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         lateinit var itemUserBinding: ItemUserBinding
         constructor(itemUserBinding: ItemUserBinding) : this(itemUserBinding.root) {
             this.itemUserBinding = itemUserBinding
+            itemUserBinding.root.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    parent.itemClicked(layoutPosition, models[layoutPosition])
+                }
+            })
         }
 
         fun bind(userModel: UserModel){
@@ -24,7 +32,7 @@ class UsersRVAdapter constructor(val models: List<UserModel>):RecyclerView.Adapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersRVAdapter.UserViewHolder {
-        val binding: ItemUserBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.item_user,parent,false)
+        val binding: ItemUserBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_user, parent, false)
         return UserViewHolder(binding)
     }
 
