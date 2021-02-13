@@ -4,13 +4,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class UserContentFragAdapter constructor(val totalFrags: Int,
-                                         val parent: userContentFragAdapterParent,
-                                         fragmentManager: FragmentManager,
-                                         lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
+class UserContentFragAdapter @AssistedInject constructor(@Assisted val totalFrags: Int,
+                                                         @Assisted val parent: UserContentFragAdapterParent,
+                                                         @Assisted fragmentManager: FragmentManager,
+                                                         @Assisted lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    interface userContentFragAdapterParent{
+    interface UserContentFragAdapterParent{
         fun getFragByPos(position: Int): Fragment
     }
 

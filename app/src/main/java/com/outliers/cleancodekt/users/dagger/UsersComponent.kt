@@ -1,6 +1,7 @@
 package com.outliers.cleancodekt.users.dagger
 
 import com.outliers.cleancodekt.framework.dagger.ActivityScope
+import com.outliers.cleancodekt.userprofile.ui.UserProfileActivity
 import com.outliers.cleancodekt.users.ui.UsersActivity
 import dagger.Subcomponent
 

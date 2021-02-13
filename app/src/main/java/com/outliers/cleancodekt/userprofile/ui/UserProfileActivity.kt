@@ -19,32 +19,39 @@ import com.outliers.cleancodekt.users.adapters.UserContentFragAdapter
 import com.outliers.cleancodekt.users.models.UserModel
 import javax.inject.Inject
 
-class UserProfileActivity : CCKtParentActivity(), UserContentFragAdapter.userContentFragAdapterParent {
+class UserProfileActivity : CCKtParentActivity(), UserContentFragAdapter.UserContentFragAdapterParent {
 
     lateinit var userTabNames: Array<String>
     val userTabNameKeys = arrayOf("posts", "albums", "todos")
     private val binding by lazy { ActivityUserBinding.inflate(layoutInflater) }
+
     @Inject
     lateinit var viewModelFactory: UserProfileVMFactory
-    val viewModel: UserProfileViewModel by lazy { ViewModelProviders.of(
-            this, viewModelFactory).get(UserProfileViewModel::class.java) }
-    val userModel: UserModel? by lazy{ intent.getParcelableExtra("user_model") as UserModel?}
+
+    @Inject
+    lateinit var fragAdapterFactory: UserProfileComponent.UserContentFragAdapterFactory
+    val viewModel: UserProfileViewModel by lazy {
+        ViewModelProviders.of(
+                this, viewModelFactory).get(UserProfileViewModel::class.java)
+    }
+    val userModel: UserModel? by lazy { intent.getParcelableExtra("user_model") as UserModel? }
 
     override fun onCreate(onSavedInstanceState: Bundle?) {
-        val userProfileComponent: UserProfileComponent =
-                (application as CCApplication).appComponent.userProfileComponent().create()
+        val userProfileComponent: UserProfileComponent = (application as CCApplication).appComponent.userProfileComponent().create()
         userProfileComponent.inject(this)
+
         super.onCreate(onSavedInstanceState)
         setContentView(binding.root)
+
         userTabNames = arrayOf(getString(R.string.title_posts), getString(R.string.title_albums),
                 getString(R.string.title_todos))
         setUpActionBar(userModel?.name)
-        val fragAdapter = UserContentFragAdapter(userTabNameKeys.size, this,
+        val fragAdapter = fragAdapterFactory.create(userTabNameKeys.size, this,
                 supportFragmentManager, lifecycle)
         binding.userPages.adapter = fragAdapter
         binding.userPages.offscreenPageLimit = 2
         TabLayoutMediator(binding.userTabs, binding.userPages, true, true) { tab, position -> tab.setText(userTabNames[position]) }.attach()
-        binding.userPages.registerOnPageChangeCallback(object : OnPageChangeCallback(){
+        binding.userPages.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 viewModel.currFragLiveData.value = supportFragmentManager.findFragmentByTag("f$position")
@@ -60,7 +67,7 @@ class UserProfileActivity : CCKtParentActivity(), UserContentFragAdapter.userCon
         }
     }
 
-    fun setUpActionBar(title: String?){
+    fun setUpActionBar(title: String?) {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
