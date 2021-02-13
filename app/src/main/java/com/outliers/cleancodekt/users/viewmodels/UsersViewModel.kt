@@ -20,6 +20,7 @@ class UsersViewModel(val usersRepo: UsersRepo):ViewModel() {
     }
 
     fun fetchUsers(pageNum:Int = Const.INIT_PAGE_NUM, pageSize:Int = Const.PAGE_SIZE){
+        // this is called on main thread. repo functions use withContext with dispatchers to execute on IO threads
         viewModelScope.launch {
             val resp: Response<List<UserModel>> = usersRepo.fetchUsers(pageNum, pageSize)
             if(resp.isSuccessful) {

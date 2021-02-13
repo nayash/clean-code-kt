@@ -3,6 +3,9 @@ package com.outliers.cleancodekt.userprofile.dagger
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import com.outliers.cleancodekt.framework.dagger.ActivityScope
+import com.outliers.cleancodekt.userprofile.albums.ui.AlbumsFragment
+import com.outliers.cleancodekt.userprofile.posts.ui.PostsFragment
+import com.outliers.cleancodekt.userprofile.todos.ui.TodosFragment
 import com.outliers.cleancodekt.userprofile.ui.UserProfileActivity
 import com.outliers.cleancodekt.users.adapters.UserContentFragAdapter
 import dagger.Subcomponent
@@ -24,4 +27,7 @@ interface UserProfileComponent {
     }
 
     fun inject(userProfileActivity: UserProfileActivity)
+    fun inject(postsFragment: PostsFragment)
+    fun inject(albumsFragment: AlbumsFragment)
+    fun inject(todosFragment: TodosFragment)
 }
