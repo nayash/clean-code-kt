@@ -26,23 +26,16 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
     val isLastAlbum = MutableLiveData<Boolean>()
     val isLastTodo = MutableLiveData<Boolean>()
 
-    init {
-        todosLiveData.value = ArrayList()
-    }
-
     fun fetchPosts(pageNum: Int = Const.INIT_PAGE_NUM, pageSize: Int = Const.PAGE_SIZE) {
         if (postsLiveData.value == null)
             postsLiveData.value = ArrayList()
         viewModelScope.launch {
             val response = userModel.id?.let { userProfileRepo.getUserPosts(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                if (response?.body()?.size == 0) {
-                    isLastPost.value = true
-                    return@launch
-                }
                 Log.d("test-vmResp", response?.body().toString())
                 postsLiveData.value =
                     postsLiveData.value?.apply { addAll(response?.body() as ArrayList) }
+                isLastPost.value = response?.body()?.size == 0
             } else {
 
             }
@@ -55,13 +48,10 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
         viewModelScope.launch {
             val response = userModel.id?.let { userProfileRepo.getUserAlbums(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                if (response?.body()?.size == 0) {
-                    isLastAlbum.value = true
-                    return@launch
-                }
                 Log.d("test-vmResp", response?.body().toString())
                 albumsLiveData.value =
                     albumsLiveData.value?.apply { addAll(response.body() as ArrayList) }
+                isLastAlbum.value = response?.body()?.size == 0
             } else {
 
             }
@@ -74,13 +64,10 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
         viewModelScope.launch {
             val response = userModel.id?.let { userProfileRepo.getUserTodos(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                if (response?.body()?.size == 0) {
-                    isLastTodo.value = true
-                    return@launch
-                }
                 Log.d("test-vmResp", response?.body().toString())
                 todosLiveData.value =
                     todosLiveData.value?.apply { addAll(response.body() as ArrayList) }
+                isLastTodo.value = response?.body()?.size == 0
             } else {
 
             }

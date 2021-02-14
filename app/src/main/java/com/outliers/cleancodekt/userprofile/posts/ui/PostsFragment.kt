@@ -62,10 +62,10 @@ class PostsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent 
             binding.srl.isRefreshing = false
         })
 
-        viewModel.isLastPost.observe(this, Observer {
+        /*viewModel.isLastPost.observe(this, Observer {
             binding.srl.isEnabled =
                 (!isLastPage || (binding.rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition() == 0)
-        })
+        })*/
     }
 
     override val isLoading: Boolean
