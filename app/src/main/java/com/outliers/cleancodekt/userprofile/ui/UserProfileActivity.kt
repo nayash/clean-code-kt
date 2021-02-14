@@ -1,6 +1,7 @@
 package com.outliers.cleancodekt.userprofile.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -80,5 +81,12 @@ class UserProfileActivity : CCKtParentActivity(),
 
     override fun getActivityViewModel(): UserProfileViewModel {
         return viewModel
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId ){
+            android.R.id.home -> onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

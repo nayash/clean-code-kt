@@ -4,6 +4,8 @@
     <string name="title_posts">Posts</string>
     <string name="title_albums">Albums</string>
     <string name="title_todos">ToDos</string>
+    <string name="text_completed">Completed</string>
+    <string name="text_pending">Pending</string>
 
     <!-- error strings -->
     <string name="need_user_model">Need a user to fetch all the posts, albums etc.</string>
