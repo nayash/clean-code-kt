@@ -14,7 +14,6 @@ import com.outliers.cleancodekt.userprofile.dagger.UserProfileComponent
 import com.outliers.cleancodekt.userprofile.interfaces.IUserProfile
 import com.outliers.cleancodekt.userprofile.posts.ui.PostsFragment
 import com.outliers.cleancodekt.userprofile.todos.ui.TodosFragment
-import com.outliers.cleancodekt.userprofile.viewmodels.UserProfileVMFactory
 import com.outliers.cleancodekt.userprofile.viewmodels.UserProfileViewModel
 import com.outliers.cleancodekt.users.adapters.UserContentFragAdapter
 import com.outliers.cleancodekt.users.models.UserModel
@@ -28,15 +27,15 @@ class UserProfileActivity : CCKtParentActivity(),
     private val binding by lazy { ActivityUserBinding.inflate(layoutInflater) }
 
     @Inject
-    lateinit var viewModelFactory: UserProfileVMFactory
+    lateinit var viewModelFactoryFactory: UserProfileComponent.UserProfileVMFactoryFactory
     @Inject
     lateinit var fragAdapterFactory: UserProfileComponent.UserContentFragAdapterFactory
     lateinit var userProfileComponent: UserProfileComponent
+    val userModel: UserModel? by lazy { intent.getParcelableExtra("user_model") as UserModel? }
     val viewModel: UserProfileViewModel by lazy {
         ViewModelProviders.of(
-                this, viewModelFactory).get(UserProfileViewModel::class.java)
+                this, viewModelFactoryFactory.create(userModel)).get(UserProfileViewModel::class.java)
     }
-    val userModel: UserModel? by lazy { intent.getParcelableExtra("user_model") as UserModel? }
 
     override fun onCreate(onSavedInstanceState: Bundle?) {
         userProfileComponent = (application as CCApplication).appComponent.userProfileComponent().create()

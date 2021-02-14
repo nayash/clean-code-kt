@@ -1,6 +1,7 @@
 package com.outliers.cleancodekt.userprofile.posts.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,15 +20,22 @@ class PostsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent 
     val parent by lazy { activity as IUserProfile }
     val viewModel by lazy { parent.getActivityViewModel() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         parent.getActivityComponent().inject(this)
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding.rv.layoutManager = LinearLayoutManager(activity)
         binding.rv.apply {
             addOnScrollListener(
-                    RecyclerViewPaginator(this, this@PostsFragment,
-                            Const.PAGE_SIZE, Const.INIT_PAGE_NUM))
+                RecyclerViewPaginator(
+                    this, this@PostsFragment,
+                    Const.PAGE_SIZE, Const.INIT_PAGE_NUM
+                )
+            )
         }
         binding.srl.setOnRefreshListener { onRefresh() }
         observerVM()
@@ -36,25 +44,37 @@ class PostsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent 
     }
 
     fun onRefresh() {
+        binding.srl.isRefreshing = true
         viewModel.refreshPosts()
     }
 
     fun observerVM() {
         viewModel.postsLiveData.observe(this, Observer {
+            Log.d(
+                "test-observe",
+                binding.rv.adapter.toString() + ", " + viewModel.postsLiveData.value
+            )
             if (binding.rv.adapter == null) {
                 val adapter = viewModel.postsLiveData.value?.let { it1 -> PostsRVAdapter(it1) }
                 binding.rv.adapter = adapter
             }
             binding.rv.adapter?.notifyDataSetChanged()
+            binding.srl.isRefreshing = false
+        })
+
+        viewModel.isLastPost.observe(this, Observer {
+            binding.srl.isEnabled =
+                (!isLastPage || (binding.rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition() == 0)
         })
     }
 
     override val isLoading: Boolean
         get() = binding.srl.isRefreshing
     override val isLastPage: Boolean
-        get() = viewModel.isLastPost.value?:false
+        get() = viewModel.isLastPost.value ?: false
 
     override fun loadMore(page: Int, batchSize: Int) {
+        binding.srl.isRefreshing = true
         viewModel.fetchPosts(page, batchSize)
     }
 }

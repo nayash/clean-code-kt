@@ -7,7 +7,9 @@ import com.outliers.cleancodekt.userprofile.albums.ui.AlbumsFragment
 import com.outliers.cleancodekt.userprofile.posts.ui.PostsFragment
 import com.outliers.cleancodekt.userprofile.todos.ui.TodosFragment
 import com.outliers.cleancodekt.userprofile.ui.UserProfileActivity
+import com.outliers.cleancodekt.userprofile.viewmodels.UserProfileVMFactory
 import com.outliers.cleancodekt.users.adapters.UserContentFragAdapter
+import com.outliers.cleancodekt.users.models.UserModel
 import dagger.Subcomponent
 import dagger.assisted.AssistedFactory
 
@@ -19,6 +21,13 @@ interface UserProfileComponent {
     interface UserContentFragAdapterFactory{
         fun create(fragsCount: Int, parent: UserContentFragAdapter.UserContentFragAdapterParent,
         fragmentManager: FragmentManager, lifecycle: Lifecycle): UserContentFragAdapter
+    }
+
+    @ActivityScope
+    @AssistedFactory
+    interface UserProfileVMFactoryFactory{ // VM needs Factory because it has dependencies outside graph,
+        // the Factory itself needs a Factory because it depends on UserModel which activity provides from intent
+        fun create(userModel: UserModel?): UserProfileVMFactory
     }
 
     @Subcomponent.Factory
