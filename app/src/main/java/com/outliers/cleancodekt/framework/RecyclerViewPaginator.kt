@@ -1,5 +1,6 @@
 package com.outliers.cleancodekt.framework
 
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,7 @@ class RecyclerViewPaginator(val recyclerView: RecyclerView, val parent: Recycler
                 visibleItems = gridLayoutManager.childCount
                 lastItemPos = gridLayoutManager.findLastVisibleItemPosition()
             }
-
+            Log.e("test-paginator", parent.isLastPage.toString())
             if(parent.isLoading or parent.isLastPage)
                 return
 
