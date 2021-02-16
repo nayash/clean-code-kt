@@ -1,14 +1,14 @@
 package com.outliers.cleancodekt.userprofile.albums.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.outliers.cleancodekt.R
 import com.outliers.cleancodekt.constants.Const
 import com.outliers.cleancodekt.databinding.AlbumsListBinding
+import com.outliers.cleancodekt.framework.ApiCallState
 import com.outliers.cleancodekt.framework.RecyclerViewPaginator
 import com.outliers.cleancodekt.userprofile.albums.adapters.AlbumsRVAdapter
 import com.outliers.cleancodekt.userprofile.interfaces.IUserProfile
@@ -19,6 +19,11 @@ class AlbumsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent
     val parent by lazy { activity as IUserProfile }
     val viewModel by lazy { parent.getActivityViewModel() }
     val userProfileComponent by lazy { parent.getActivityComponent() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,22 +56,42 @@ class AlbumsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent
                     )
                 }
             }
-            binding.srl.isRefreshing = false
             binding.rv.adapter?.notifyDataSetChanged()
         })
+        viewModel.albumsFragApiCallState.let {
+            it.observe(this, Observer {
+                binding.srl.isRefreshing = (it == ApiCallState.LOADING)
+            })
+        }
     }
 
     fun onRefresh() {
-        binding.srl.isRefreshing = true
         viewModel.refreshAlbums()
     }
 
     override val isLoading: Boolean
-        get() = binding.srl.isRefreshing
+        get() = viewModel.albumsFragApiCallState.value == ApiCallState.LOADING
     override val isLastPage: Boolean
         get() = viewModel.isLastAlbum.value == true
 
     override fun loadMore(page: Int, batchSize: Int) {
         viewModel.fetchAlbums(page, batchSize)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_albums_frag, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_create_album -> createNewAlbum()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun createNewAlbum() {
+
     }
 }

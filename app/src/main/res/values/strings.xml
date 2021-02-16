@@ -7,6 +7,11 @@
     <string name="text_completed">Completed</string>
     <string name="text_pending">Pending</string>
 
+    <!-- menu strings -->
+    <string name="title_create_post">Create Post</string>
+    <string name="title_create_album">Create Album</string>
+    <string name="title_create_todo">Create Todo</string>
+
     <!-- error strings -->
     <string name="need_user_model">Need a user to fetch all the posts, albums etc.</string>
 </resources>

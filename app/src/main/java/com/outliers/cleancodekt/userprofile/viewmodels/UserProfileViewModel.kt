@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.outliers.cleancodekt.constants.Const
+import com.outliers.cleancodekt.framework.ApiCallState
 import com.outliers.cleancodekt.userprofile.albums.models.AlbumModel
 import com.outliers.cleancodekt.userprofile.network.UserProfileRepo
 import com.outliers.cleancodekt.userprofile.posts.models.PostModel
@@ -26,16 +27,28 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
     val isLastAlbum = MutableLiveData<Boolean>()
     val isLastTodo = MutableLiveData<Boolean>()
 
+    var postsFragApiCallState: MutableLiveData<ApiCallState> = MutableLiveData()
+    var albumsFragApiCallState: MutableLiveData<ApiCallState> = MutableLiveData()
+    var todosFragApiCallState: MutableLiveData<ApiCallState> = MutableLiveData()
+
+    init {
+        postsFragApiCallState.value = ApiCallState.INITIAL
+        albumsFragApiCallState.value = ApiCallState.INITIAL
+        todosFragApiCallState.value = ApiCallState.INITIAL
+    }
+
     fun fetchPosts(pageNum: Int = Const.INIT_PAGE_NUM, pageSize: Int = Const.PAGE_SIZE) {
         if (postsLiveData.value == null)
             postsLiveData.value = ArrayList()
         viewModelScope.launch {
+            postsFragApiCallState.value = ApiCallState.LOADING
             val response = userModel.id?.let { userProfileRepo.getUserPosts(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                Log.d("test-vmResp", response?.body().toString())
+                Log.d("test-RespPosts", response?.body().toString())
                 postsLiveData.value =
                     postsLiveData.value?.apply { addAll(response?.body() as ArrayList) }
                 isLastPost.value = response?.body()?.size == 0
+                postsFragApiCallState.value = ApiCallState.FINISHED
             } else {
 
             }
@@ -46,12 +59,14 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
         if (albumsLiveData.value == null)
             albumsLiveData.value = ArrayList()
         viewModelScope.launch {
+            albumsFragApiCallState.value = ApiCallState.LOADING
             val response = userModel.id?.let { userProfileRepo.getUserAlbums(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                Log.d("test-vmResp", response?.body().toString())
+                Log.d("test-RespAlbums", response?.body().toString())
                 albumsLiveData.value =
                     albumsLiveData.value?.apply { addAll(response.body() as ArrayList) }
                 isLastAlbum.value = response?.body()?.size == 0
+                albumsFragApiCallState.value = ApiCallState.FINISHED
             } else {
 
             }
@@ -59,15 +74,17 @@ class UserProfileViewModel(val userModel: UserModel, val userProfileRepo: UserPr
     }
 
     fun fetchTodos(pageNum: Int = Const.INIT_PAGE_NUM, pageSize: Int = Const.PAGE_SIZE) {
-        if (albumsLiveData.value == null)
-            albumsLiveData.value = ArrayList()
+        if (todosLiveData.value == null)
+            todosLiveData.value = ArrayList()
         viewModelScope.launch {
+            todosFragApiCallState.value = ApiCallState.LOADING
             val response = userModel.id?.let { userProfileRepo.getUserTodos(it, pageNum, pageSize) }
             if (response?.isSuccessful == true) {
-                Log.d("test-vmResp", response?.body().toString())
+                Log.d("test-RespTodo", response?.body().toString())
                 todosLiveData.value =
                     todosLiveData.value?.apply { addAll(response.body() as ArrayList) }
                 isLastTodo.value = response?.body()?.size == 0
+                todosFragApiCallState.value = ApiCallState.FINISHED
             } else {
 
             }
