@@ -3,6 +3,7 @@ package com.outliers.cleancodekt.userprofile.albums.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.outliers.cleancodekt.R
@@ -12,12 +13,13 @@ import com.outliers.cleancodekt.framework.ApiCallState
 import com.outliers.cleancodekt.framework.RecyclerViewPaginator
 import com.outliers.cleancodekt.userprofile.albums.adapters.AlbumsRVAdapter
 import com.outliers.cleancodekt.userprofile.interfaces.IUserProfile
+import com.outliers.cleancodekt.userprofile.viewmodels.UserProfileViewModel
 
 class AlbumsFragment : Fragment(), RecyclerViewPaginator.RecyclerPaginatorParent {
 
     val binding by lazy { AlbumsListBinding.inflate(layoutInflater) }
     val parent by lazy { activity as IUserProfile }
-    val viewModel by lazy { parent.getActivityViewModel() }
+    val viewModel by lazy { activityViewModels<UserProfileViewModel>() } // parent.getActivityViewModel()
     val userProfileComponent by lazy { parent.getActivityComponent() }
 
     override fun onCreate(savedInstanceState: Bundle?) {

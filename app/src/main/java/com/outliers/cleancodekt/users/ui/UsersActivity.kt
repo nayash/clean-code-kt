@@ -58,10 +58,10 @@ class UsersActivity : CCKtParentActivity(), RecyclerViewPaginator.RecyclerPagina
         observeVM()
         binder.srlUsers.setOnRefreshListener { onRefresh() }
         onRefresh()
-        println("test--" + (usersRepo === usersRepo1).toString())
     }
 
     fun onRefresh() {
+        println("onRefresh called")
         usersViewModel.refresh()
     }
 

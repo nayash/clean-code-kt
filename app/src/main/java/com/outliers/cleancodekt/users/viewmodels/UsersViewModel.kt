@@ -30,6 +30,7 @@ class UsersViewModel(val usersRepo: UsersRepo):ViewModel(), AppViewModel {
             val resp: Response<List<UserModel>> = usersRepo.fetchUsers(pageNum, pageSize)
             if(resp.isSuccessful) {
                 resp.body()?.let { listUsers.addAll(it)
+                    println("users fetched:"+it.size)
                     if(it.size == 0){
                         isLastPage.value = true
                     }

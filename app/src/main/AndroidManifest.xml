@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".userprofile.ui.UserProfileActivity"
-            android:theme="@style/Theme.CleanCodeKt.NoActionBar"/>
+            android:theme="@style/Theme.CleanCodeKt.NoActionBar"
+            android:label=""/>
     </application>
 
 </manifest>
